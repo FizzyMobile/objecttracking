@@ -1,0 +1,51 @@
+Instalacja OpenCV (Windows)
+
+Instalacjê OpenCV mo¿na przeprowadziæ na dwa sposoby: instalacja z wykorzystaniem wczeœniej stworzonych i zestawionych bibliotek oraz  instalacja poprzez stworzenie w³asnych bibliotek z kodów Ÿród³owych. Poni¿ej przedstawiono krok po kroku drug¹ metodê instalacji OpenCV.
+
+Przygotowanie narzêdzi
+
+	Podejœcie drugie – instalacja poprzez stworzenie w³asnych bibliotek – jest podejœciem trudniejszym, jednak pozwalaj¹cym na wykorzystanie IDE innych ni¿ Microsoft Visual Studio oraz umo¿liwiaj¹cym zastosowanie najnowszych technologii w integracji naszej biblioteki.
+
+	Pierwszym etapem jest przygotowanie narzêdzi. Wszystkie niezbêdne kody Ÿród³owe dostêpne s¹ na stronie https://github.com/Itseez/opencv.git . Nale¿y zainstalowaæ wymienione poni¿ej elementy:
+•	IDE – dowolne z wbudowanym kompilatorem CC++,
+•	CMake – wygodne narzêdzie do tworzenia plików projektów dla wybranego IDE z plików Ÿród³owych OpenCV, 
+•	Git – przydatne bêdzie równie¿ narzêdzie – TortoiseGit, alternatyw¹ jest Git dla Eclipsa
+
+	Dodatkowymi narzêdziami, które w trakcie realizacji projektów mog¹ siê przydaæ (wybrane z wymienionych w oryginalnym poradniku s¹:
+•	Eigen 3.1.2 – biblioteka C++ do obliczeñ z zakresu algebry liniowej,
+•	OpenEXR 1.4.0 
+	Na uwagê zas³uguje Qt framework, który móg³by u³atwiæ implementacjê graficznego interfejsu aplikacji. Ze wzglêdu na to, ¿e Qt sta³ siê ca³kowicie Open Source po pewnym czasie pojawi³y siê pewne problemy z jego utrzymaniem, wobec czego zosta³ zdjêty ze strony producenta. Framework nadal mo¿na znaleŸæ w sieci i wykorzystaæ integruj¹c np. z Eclipse. Czêsto spotkaæ siê mo¿na z opini¹, ¿e warto jednak skorzystaæ z alternatywy jak¹ jest Qt Creator.
+	
+
+Stworzenie biblioteki
+	
+Krok 1.
+Upewnij siê, ¿e masz zainstalowany IDE oraz poprawny kompilator.
+
+Krok 2.
+Zainstaluj CMake.
+
+Krok 3.
+Pobierz i zainstaluj (rozpakuj) Git  oraz TortoiseGit.
+
+Krok 4.
+Utwórz katalog, w którym znajdzie siê biblioteka OpenCV. Pobierz repozytorium OpenCV z github (https://github.com/Itseez/opencv.git) poprzez wykorzystanie polecenia Clone. Mo¿e byæ to d³ugi proces ze wzglêdu na wagê plików.
+
+Krok 5.
+Teraz mo¿na instalowaæ tzw. 3rd party libraries. Mog¹ to byæ narzêdzia do tworzenia dokumentacji, lepszej obs³ugi karty graficznej, biblioteki do przeprowadzania skomplikowanych obliczeñ i wiele innych w zale¿noœci od potrzeb. Instalacja zwykle polega na umieszczenie plików Ÿród³owych bibliotek do folderu 3rdparty.
+
+Krok 6.
+Uruchom CMake ( make-gui ). Wyœwietli siê okno, w którym nale¿y podaæ œcie¿kê kodów Ÿród³owych.
+
+
+Podsumowanie zainstalowanych narzêdzi i bibliotek
+•	Eclipse 4.2.1
+•	OpenCV 2.4.2
+•	Git 1.8.0
+•	TortoiseGit 1.7.14.1
+•	CMake 2.8.10.1
+•	Eigen
+•	OpenEXR
+
+
+ród³o opisu instalacji: "http://docs.opencv.org/doc/tutorials"
