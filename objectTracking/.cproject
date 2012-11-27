@@ -40,8 +40,9 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/objectTracking/lib}&quot;"/>
 								</option>
 								<option id="gnu.cpp.link.option.libs.1530742763" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
-									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="opencv_core242"/>
-									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="opencv_highgui242"/>
+									<listOptionValue builtIn="false" value="opencv_core242"/>
+									<listOptionValue builtIn="false" value="opencv_imgproc242"/>
+									<listOptionValue builtIn="false" value="opencv_highgui242"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.1491924851" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>

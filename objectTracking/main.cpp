@@ -6,11 +6,28 @@ using namespace cv;
 using namespace std;
 
 int main(int argc, char** argv) {
+	bool finish = false;
 
-	const string videoStreamAddress = "rtsp://192.168.0.106:554/live.sdp";
-	KheperaView* kheperaView = new KheperaView(videoStreamAddress);
-	if (kheperaView->showView() < 0) {
+	/* Kolo Naukowe Robotyki's Camera */
+	//string rtspAddress = "rtsp://192.168.0.106:554/live.sdp";
+	/* Testing Camera */
+	string rtspAddress = "rtsp://212.77.7.133:80/h264lan.sdp";
+
+	KheperaView* kheperaView = new KheperaView(rtspAddress);
+	if (kheperaView->start() < 0) {
 		printf("Camera is null\n");
+		finish = true;
+	}
+
+	while (!finish) {
+		kheperaView->capture();
+
+
+		//kheperaView->show_gray_view();
+		kheperaView->show_main_view();
+
+
+		finish = kheperaView->is_finish();
 	}
 
 	waitKey(0);
