@@ -24,13 +24,13 @@ int main(int argc, char** argv) {
 
 
 		//kheperaView->show_gray_view();
-		kheperaView->show_main_view();
+		kheperaView->show_main_panel();
 
 
-		finish = kheperaView->is_finish();
+		finish = kheperaView->is_stoped();
 	}
 
 	waitKey(0);
+	cvDestroyAllWindows();
 	return 0;
 }
-
