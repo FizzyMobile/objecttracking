@@ -41,6 +41,7 @@
 								</option>
 								<option id="gnu.cpp.link.option.libs.1530742763" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
 									<listOptionValue builtIn="false" value="opencv_core242"/>
+									<listOptionValue builtIn="false" value="ws2_32"/>
 									<listOptionValue builtIn="false" value="opencv_imgproc242"/>
 									<listOptionValue builtIn="false" value="opencv_highgui242"/>
 								</option>
