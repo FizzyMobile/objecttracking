@@ -12,6 +12,7 @@
 #include "opencv/cv.h"
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
+#include "Target.h"
 
 #define MAINPANELNAME "Khepera View - MAIN PANEL"
 struct panel_t {
@@ -32,6 +33,7 @@ private:
 	bool _pause;
 	bool _stop;
 	struct panel_t _mainPanel;
+	Target _target;
 	/* PANEL */
 	void init_main_panel();
 	/* SETTERS */
@@ -51,8 +53,14 @@ public:
 	/* GETTERS */
 	bool is_paused(); // returning _pause
 	bool is_stoped(); // returning _stop
+	bool is_target_set();
 	struct panel_t* get_mainPanel();
 	Mat* get_frame();
+	int get_height();
+	int get_width();
+	Point get_target_position();
+	/* SETTERS */
+	void set_target(Target* target);
 };
 
 #endif /* KHEPERAVIEW_H_ */

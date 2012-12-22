@@ -55,7 +55,7 @@ bool KheperaView::is_stoped() {
 
 void KheperaView::capture() {
 	if (!_vcap.read(_frame)) {
-		printf("Oops: No frame\n");
+		printf("No frame to read\n");
 	}
 }
 
@@ -67,15 +67,39 @@ struct panel_t* KheperaView::get_mainPanel() {
 	return &_mainPanel;
 }
 
-void point_target(Mat frame, CvRect targetBox) {
-	printf("Find target in box - size width:%d height:%d x0:%d y0:%d\n",
+int KheperaView::get_height(){
+	return get_frame()->rows;
+}
+
+int KheperaView::get_width(){
+	return get_frame()->cols;
+}
+
+bool KheperaView::is_target_set() {
+	return _target.is_ready();
+}
+
+Point KheperaView::get_target_position(){
+	return _target.get_center();
+}
+
+Target* point_target(Mat frame, CvRect targetBox) {
+	printf("Finding target in box - size width:%d height:%d x0:%d y0:%d\n",
 			targetBox.width, targetBox.height, targetBox.x, targetBox.y);
 
-	Mat target = frame(Range(targetBox.y, targetBox.y + targetBox.height),
+	Mat targetImg = frame(Range(targetBox.y, targetBox.y + targetBox.height),
 			Range(targetBox.x, targetBox.x + targetBox.width));
 
-	imshow("Target", target);
+	//imshow("Target", targetImg);
+	return new Target(targetImg, targetBox);
+}
 
+void KheperaView::set_target(Target* target) {
+	_target = *target;
+	circle(_frame, _target.get_center(), 5, Scalar(0, 0, 255), 1, 8, 0);
+	circle(_frame, _target.get_center(), 10, Scalar(0, 0, 255), 1, 8, 0);
+	imshow("Target is here", _frame);
+	moveWindow("Target is here", 660, 1);
 }
 
 void mouse_callback(int event, int x, int y, int flags, void* param) {
@@ -119,7 +143,7 @@ void mouse_callback(int event, int x, int y, int flags, void* param) {
 				mainPanel->targetBox.y += mainPanel->targetBox.height;
 				mainPanel->targetBox.height *= -1;
 			}
-			point_target(*(kv->get_frame()), mainPanel->targetBox);
+			kv->set_target(point_target(*(kv->get_frame()), mainPanel->targetBox));
 		} else {
 			printf("Left button up x:%d y:%d\n", x, y);
 		}
@@ -155,4 +179,3 @@ void KheperaView::show_gray_view() {
 void KheperaView::set_rtsp(const string rtsp) {
 	_rtsp = rtsp;
 }
-
