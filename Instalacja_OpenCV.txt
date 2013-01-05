@@ -1,4 +1,4 @@
-Instalacja OpenCV (Windows)
+Instalacja OpenCV (Windows) 
 
 Instalacjê OpenCV mo¿na przeprowadziæ na dwa sposoby: instalacja z wykorzystaniem wczeœniej stworzonych i zestawionych bibliotek oraz  instalacja poprzez stworzenie w³asnych bibliotek z kodów Ÿród³owych. Poni¿ej przedstawiono krok po kroku drug¹ metodê instalacji OpenCV.
 
