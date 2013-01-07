@@ -24,8 +24,22 @@ Target::Target(Mat targetImg, CvRect rectBounding) {
 		_center.x = half_size(_rectBoundingMask.cols) + _rectBounding.x;
 		_center.y = half_size(_rectBoundingMask.rows) + _rectBounding.y;
 		_ready = true;
-		imshow("Mask adjusted to size", _rectBoundingMask);
-		moveWindow("Mask adjusted to size", 350, 500);
+		//imshow("Mask adjusted to size", _rectBoundingMask);
+		//moveWindow("Mask adjusted to size", 350, 500);
+	} else {
+		_ready = false;
+	}
+}
+
+void Target::simulate(Mat targetImg, CvRect rectBounding) {
+	_targetImg = targetImg.clone();
+	this->extract_from(_targetImg); // _rectBoundingMask created
+	if (this->adjust_size(rectBounding)) {
+		_center.x = half_size(_rectBoundingMask.cols) + _rectBounding.x;
+		_center.y = half_size(_rectBoundingMask.rows) + _rectBounding.y;
+		_ready = true;
+		//imshow("Mask adjusted to size", _rectBoundingMask);
+		//moveWindow("Mask adjusted to size", 350, 500);
 	} else {
 		_ready = false;
 	}

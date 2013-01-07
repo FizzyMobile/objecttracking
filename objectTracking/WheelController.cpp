@@ -41,7 +41,7 @@ std::pair<int, int> WheelController::getSpeeds(float angle) const {
 	pair<int, int> speeds = make_pair(l_to_r * speed, (1./l_to_r) * speed);
 	return speeds;
 }
-
+/*
 int main() {
 	WheelController wc;
 	pair<int,int> sr, ml;
@@ -50,3 +50,4 @@ int main() {
 	cout << sr.first << ", " << sr.second << endl;
 	cout << ml.first << ", " << ml.second;
 }
+*/

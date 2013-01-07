@@ -7,6 +7,9 @@
 
 #include "KheperaView.h"
 
+using cv::line;
+using cv::line;
+
 KheperaView::KheperaView(string rtspAddress) {
 	_pause = true;
 	_stop = false;
@@ -15,12 +18,12 @@ KheperaView::KheperaView(string rtspAddress) {
 }
 
 void KheperaView::init_main_panel() {
-	_mainPanel.name = MAINPANELNAME;
+	_mainPanel.name = CAMERA_VIEW_NAME;
 	_mainPanel.pointingTarget = false;
-	//TODO add buttons
 }
 
 int KheperaView::start() {
+	printf("Connecting to\n %s\n", _rtsp.c_str());
 	if (!_vcap.open(_rtsp)) {
 		printf("Error opening video stream\n");
 		return -1;
@@ -53,9 +56,21 @@ bool KheperaView::is_stoped() {
 	return _stop;
 }
 
+bool KheperaView::khepera_key_listener() {
+	char key;
+	key = cvWaitKey(1);
+	if (key == 'q' || key == 'Q'){
+		return true;
+	}
+	return false;
+}
+
 void KheperaView::capture() {
-	if (!_vcap.read(_frame)) {
-		printf("No frame to read\n");
+	_stop = khepera_key_listener();
+	if (!_stop){
+		if (!_vcap.read(_frame)) {
+			printf("No frame to read\n");
+		}
 	}
 }
 
@@ -88,7 +103,7 @@ Target* point_target(Mat frame, CvRect targetBox) {
 			targetBox.width, targetBox.height, targetBox.x, targetBox.y);
 
 	Mat targetImg = frame(Range(targetBox.y, targetBox.y + targetBox.height),
-			Range(targetBox.x, targetBox.x + targetBox.width));
+						  Range(targetBox.x, targetBox.x + targetBox.width));
 
 	//imshow("Target", targetImg);
 	return new Target(targetImg, targetBox);
@@ -96,10 +111,16 @@ Target* point_target(Mat frame, CvRect targetBox) {
 
 void KheperaView::set_target(Target* target) {
 	_target = *target;
-	circle(_frame, _target.get_center(), 5, Scalar(0, 0, 255), 1, 8, 0);
-	circle(_frame, _target.get_center(), 10, Scalar(0, 0, 255), 1, 8, 0);
-	imshow("Target is here", _frame);
-	moveWindow("Target is here", 660, 1);
+	//imshow("Target is here", _frame);
+	//moveWindow("Target is here", 660, 1);
+}
+
+void KheperaView::print_viewInfo(){
+
+}
+
+void KheperaView::print_targetInfo(){
+
 }
 
 void mouse_callback(int event, int x, int y, int flags, void* param) {
@@ -116,25 +137,26 @@ void mouse_callback(int event, int x, int y, int flags, void* param) {
 	case CV_EVENT_LBUTTONDOWN:
 		if (flags & CV_EVENT_FLAG_CTRLKEY) {
 			printf("Left button down with CTRL pressed x:%d y:%d\n", x, y);
-			mainPanel->pointingTarget = true;
-			mainPanel->targetBox = cvRect(x, y, 0, 0);
-			break;
+				if (kv->is_paused()) {
+					printf("Image resumed\n");
+					kv->resume();
+				} else {
+					printf("Image paused\n");
+					kv->pause();
+				}
 		} else {
 			printf("Left button down x:%d y:%d\n", x, y);
-			//TODO menu click?
-			if (kv->is_paused()) {
-				printf("Image resumed\n");
-				kv->resume();
-			} else {
-				printf("Image paused\n");
-				kv->pause();
-			}
+				mainPanel->pointingTarget = true;
+				mainPanel->targetBox = cvRect(x, y, 0, 0);
+				break;
 		}
 		break;
 	case CV_EVENT_LBUTTONUP:
 		mainPanel->pointingTarget = false;
 		if (flags & CV_EVENT_FLAG_CTRLKEY) {
 			printf("Left button up with CTRL pressed x:%d y:%d\n", x, y);
+		} else {
+			printf("Left button up x:%d y:%d\n", x, y);
 			if (mainPanel->targetBox.width < 0) {
 				mainPanel->targetBox.x += mainPanel->targetBox.width;
 				mainPanel->targetBox.width *= -1;
@@ -143,9 +165,8 @@ void mouse_callback(int event, int x, int y, int flags, void* param) {
 				mainPanel->targetBox.y += mainPanel->targetBox.height;
 				mainPanel->targetBox.height *= -1;
 			}
+			if (mainPanel->targetBox.height > 0 && mainPanel->targetBox.width > 0)
 			kv->set_target(point_target(*(kv->get_frame()), mainPanel->targetBox));
-		} else {
-			printf("Left button up x:%d y:%d\n", x, y);
 		}
 		break;
 	}
@@ -161,18 +182,6 @@ void KheperaView::show_main_panel() {
 		imshow(_mainPanel.name, _pauseFrame);
 		if (waitKey(1) >= 0) {
 		};
-	}
-
-}
-
-void KheperaView::show_gray_view() {
-	if (!_pause) {
-		Mat gray;
-		cvtColor(_frame, gray, CV_RGB2GRAY);
-		imshow("Khepera View - RGB 2 GRAY", gray);
-		if (waitKey(1) >= 0) {
-			this->stop();
-		}
 	}
 }
 

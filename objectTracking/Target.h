@@ -26,7 +26,7 @@ private:
 	Mat _rectBoundingMask; //black for background; white for object
 	Point _center;
 	CvRect _rectBounding; 	//.x & .y are global for camera frame not _targetImg
-	//TODO spatial color histogram - i003?
+	//TODO spatial color histogram
 	/* IMAGE RECOGNITION */
 	void extract_from(Mat image);
 	void pick_bigger_object(vector<vector<Point> > contours,
@@ -39,6 +39,8 @@ public:
 	/* GETTERS */
 	bool is_ready();
 	Point get_center();
+	/* SIMULATION */
+	void simulate(Mat targetImg, CvRect rectBounding); // is updating Point _center
 };
 
 #endif /* TARGET_H_ */
