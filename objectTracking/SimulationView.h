@@ -1,59 +1,64 @@
 /*
- * KheperaView.h
+ * SimulationView.h
  *
- *  Created on: 23-11-2012
+ *  Created on: 05-01-2013
  *      Author: Max
  */
 
-#ifndef KHEPERAVIEW_H_
-#define KHEPERAVIEW_H_
+#ifndef SIMULATIONVIEW_H_
+#define SIMULATIONVIEW_H_
 
 #include "opencv2/opencv.hpp"
 #include "opencv/cv.h"
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
+#include "opencv2/core/core_c.h"
 #include "opencv2/core/core.hpp"
 #include "View.h"
 #include "Target.h"
 
-#define CAMERA_VIEW_NAME "Camera View"
-struct panel_t {
-	const char* name;
-	CvRect targetBox;
-	bool pointingTarget;
-};
+#define SIMULATION_VIEW_NAME "Simulation View"
+#define WINDOW_WIDTH 480
+#define WINDOW_HEIGHT 360
 
 using namespace cv;
 using namespace std;
 
-class KheperaView : public View {
+struct Object_t {
+	CvPoint objectTopLeft;
+	CvPoint objectBottomRight;
+	int size;
+	int speed;
+};
+
+class SimulationView : public View {
 private:
-	VideoCapture _vcap;
+	int _width;
+	int _height;
+	int _margin;
 	Mat _frame;
 	Mat _pauseFrame;
-	string _rtsp;
 	bool _pause;
 	bool _stop;
-	struct panel_t _mainPanel;
+	Object_t _object;
 	Target _target;
+	bool _pointingTarget;
 	/* PANEL */
 	void init_main_panel();
 	void print_viewInfo();
 	void print_targetInfo();
-	bool khepera_key_listener();
-	/* SETTERS */
-	void set_rtsp(const string rtsp);
+	bool simulation_key_listener(Object_t* object, int max_x, int max_y);
 
 public:
-	KheperaView(string rtspAddres);
-	/* STREAM MANAGEMENT */
-	int start(); 	//open stream (video capture)
+	SimulationView();
+	/* PSEUDO-STREAM MANAGEMENT */
+	int start(); 	//open stream
 	void pause(); 	//pause showing stream
 	void resume();	//resume showing stream
 	void stop(); 	//stop showing stream and finish
 	void capture();	//update current frame
 	/* VIEWS */
-	void show_main_panel();	//default khepera view with main panel
+	void show_main_panel();
 	/* GETTERS */
 	bool is_paused(); // returning _pause
 	bool is_stoped(); // returning _stop
@@ -67,4 +72,4 @@ public:
 	void set_target(Target* target);
 };
 
-#endif /* KHEPERAVIEW_H_ */
+#endif /* SIMULATIONVIEW_H_ */
