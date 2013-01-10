@@ -6,20 +6,22 @@
 #include "SimulationView.h"
 #include "TCPIP.h"
 #include "WheelController.h"
+#include "defines.h"
 
 using namespace cv;
 using namespace std;
 
 char *addr = "192.168.0.103";
 
+
 int main(int argc, char** argv) {
 
 	TCPIP tcpip;
-	while (!(tcpip.init() && tcpip.connect_to_server(addr, 3000))){
-				tcpip = TCPIP();
-				cout << "Connection could not be established" << endl;
-				return 1;
-			}
+//	while (!(tcpip.init() && tcpip.connect_to_server(addr, 3000))){
+//				tcpip = TCPIP();
+//				cout << "Connection could not be established" << endl;
+//				return 1;
+//			}
 
 	View* view;
 	bool finish = false;
@@ -62,8 +64,8 @@ int main(int argc, char** argv) {
 	}
 
 
-	int width = view->get_width();
-	WheelController wc;
+	//int width = view->get_width();
+	WheelController wc(view->get_width(), CAMERA_ANGLE, WHEEL_DIST);
 	pair<int,int> control;
 
 	while (!finish) {
@@ -83,7 +85,10 @@ int main(int argc, char** argv) {
 		view->capture();
 		finish = view->is_stoped();
 
-		cout << view->get_target_position() << endl;
+		control = wc.getSpeeds(view->get_target_position().x, DIST);
+		cout << control.first << ", " << control.second << endl;
+		//tcpip.send_speed(control.first, control.second);
+		//cout << view->get_target_position().x << endl;
 
 	}
 

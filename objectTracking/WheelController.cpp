@@ -8,13 +8,14 @@
 #include "WheelController.h"
 #include <iostream>
 #include <cmath>
+#include "defines.h"
 
 #define _USE_MATH_DEFINES
 
 
 using namespace std;
 
-WheelController::WheelController() {
+WheelController::WheelController(int _cw, float _ca, float _w):cam_width(_cw), cam_angle(_ca), w(_w) {
 	// TODO Auto-generated constructor stub
 
 }
@@ -27,7 +28,7 @@ WheelController::~WheelController() {
 std::pair<int, int> WheelController::getSpeeds(float angle, float d) const {
 	//const float d = 10;
 	const int speed = 10000;
-	const float w = 5; // distance between a wheel and the center of the robot
+	//const float w = 5; // distance between a wheel and the center of the robot
 
 	bool to_right = angle > 0;
 
@@ -41,6 +42,8 @@ std::pair<int, int> WheelController::getSpeeds(float angle, float d) const {
 	pair<int, int> speeds = make_pair(l_to_r * speed, (1./l_to_r) * speed);
 	return speeds;
 }
+
+
 /*
 int main() {
 	WheelController wc;
@@ -50,4 +53,10 @@ int main() {
 	cout << sr.first << ", " << sr.second << endl;
 	cout << ml.first << ", " << ml.second;
 }
-*/
+ */
+
+std::pair<int, int> WheelController::getSpeeds(int a, float d) const {
+	int hw = cam_width/2;
+	float angle = asin(1.*(a - hw)/(hw) * sin(cam_angle));
+	return getSpeeds(angle, d);
+}

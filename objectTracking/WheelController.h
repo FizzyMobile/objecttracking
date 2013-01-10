@@ -12,10 +12,14 @@
 
 class WheelController {
 public:
-	WheelController();
+	WheelController(int _cw, float _ca, float _w);
+
 	virtual ~WheelController();
 	std::pair<int, int> getSpeeds(float angle, float d) const;
-
+	std::pair<int, int> getSpeeds(int a, float d) const;
+private:
+	int cam_width;
+	float cam_angle, w;
 };
 
 #endif /* WHEELCONTROLLER_H_ */
