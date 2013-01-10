@@ -166,11 +166,24 @@ Point SimulationView::get_target_position() {
 }
 
 void SimulationView::print_viewInfo() {
-
+	line(_frame, cvPoint(0, _height-_margin), cvPoint(_width, _height-_margin), View::get_infoColor(), 1, 8, 0);
+			char info[50];
+			sprintf(info, "Press: | [WASD] to move | [+/-] speed | [Q] to quit |");
+			putText(_frame, info,
+					cvPoint(10, _height-5),
+					FONT_HERSHEY_PLAIN,
+					0.7,
+					View::get_infoColor(),
+					1,
+					CV_AA);
+			View::print_viewInfo(_frame, get_height(), get_width());
 }
 
 void SimulationView::print_targetInfo() {
-
+	if (is_target_set()){
+			Point targetCenter = get_target_position();
+			View::print_targetInfo(_frame, get_height(), get_width(), targetCenter);
+		}
 }
 
 void SimulationView::show_main_panel() {
