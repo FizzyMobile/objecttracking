@@ -24,8 +24,8 @@ WheelController::~WheelController() {
 }
 
 
-std::pair<int, int> WheelController::getSpeeds(float angle) const {
-	const float d = 30;
+std::pair<int, int> WheelController::getSpeeds(float angle, float d) const {
+	//const float d = 10;
 	const int speed = 10000;
 	const float w = 5; // distance between a wheel and the center of the robot
 

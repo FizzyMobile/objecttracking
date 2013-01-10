@@ -14,7 +14,7 @@ class WheelController {
 public:
 	WheelController();
 	virtual ~WheelController();
-	std::pair<int, int> getSpeeds(float angle) const;
+	std::pair<int, int> getSpeeds(float angle, float d) const;
 
 };
 

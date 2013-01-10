@@ -4,11 +4,23 @@
 #include "MainMenuOptions.h"
 #include "KheperaView.h"
 #include "SimulationView.h"
+#include "TCPIP.h"
+#include "WheelController.h"
 
 using namespace cv;
 using namespace std;
 
+char *addr = "192.168.0.103";
+
 int main(int argc, char** argv) {
+
+	TCPIP tcpip;
+	while (!(tcpip.init() && tcpip.connect_to_server(addr, 3000))){
+				tcpip = TCPIP();
+				cout << "Connection could not be established" << endl;
+				return 1;
+			}
+
 	View* view;
 	bool finish = false;
 
@@ -49,6 +61,11 @@ int main(int argc, char** argv) {
 		break;
 	}
 
+
+	int width = view->get_width();
+	WheelController wc;
+	pair<int,int> control;
+
 	while (!finish) {
 		view->print_viewInfo();
 		if (view->is_target_set()){
@@ -65,8 +82,12 @@ int main(int argc, char** argv) {
 
 		view->capture();
 		finish = view->is_stoped();
+
+		cout << view->get_target_position() << endl;
+
 	}
 
+	//tcpip.send_speed(0,0);
 	cvDestroyAllWindows();
 	return 0;
 }
