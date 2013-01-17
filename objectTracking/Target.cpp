@@ -6,6 +6,8 @@
  */
 
 #include "Target.h"
+#include <stdio.h>
+#include <string.h>
 
 using cv::circle;
 
@@ -83,8 +85,14 @@ void Target::pick_bigger_object(vector<vector<Point> > contours,
 	Mat noneMask = Mat::zeros(_rectBoundingMask.rows, _rectBoundingMask.cols,
 			CV_8UC1);
 	_rectBoundingMask = noneMask.clone(); // clearing mask in order to draw only one object
-	drawContours(_rectBoundingMask, contours, maxPosition.y, Scalar(255),
-			CV_FILLED); //Scalar(0) -> black = background; 255->object
+	drawContours(_rectBoundingMask, contours, maxPosition.y, Scalar(255), CV_FILLED); //Scalar(0) -> black = background; 255->object
+	vector<Point> newContours = contours.at(maxPosition.y);
+	setContours(newContours);
+}
+
+void Target::setContours(vector<Point> newContours){
+	_contours.reserve(newContours.size());
+	copy(newContours.begin(),newContours.end(),back_inserter(_contours));
 }
 
 bool Target::adjust_size(CvRect oldRect) {
