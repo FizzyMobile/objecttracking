@@ -11,8 +11,7 @@
 #include <iostream>
 
 TCPIP::TCPIP() {
-	// TODO Auto-generated constructor stub
-
+	m_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 }
 
 TCPIP::~TCPIP() {
@@ -31,9 +30,9 @@ bool TCPIP::init(){
 	if ( LOBYTE( wsaData.wVersion ) != 2 || HIBYTE( wsaData.wVersion ) != 0 ){
 		return false;
 	}
-	m_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+
 	if (m_socket == INVALID_SOCKET){
-		printf("Client: socket() - Error at socket(): %ld\n", WSAGetLastError());
+		printf("Client: socket() - Error at socket(): %d\n", WSAGetLastError());
 		return false;
 	}
 	printf("initialized\n");

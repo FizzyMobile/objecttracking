@@ -28,7 +28,7 @@ int KheperaView::start() {
 		printf("Error opening video stream\n");
 		return -1;
 	} else {
-		printf("Opening video stream succeded\n");
+		printf("Opening video stream succeeded\n");
 		resume();
 		return 1;
 	}
