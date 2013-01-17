@@ -19,11 +19,20 @@ CvScalar View::get_infoColor() {
 }
 
 void View::print_viewInfo(Mat& frame, int height, int width){
-
+	char info[50];
+		sprintf(info, "Width:%d Height:%d", width, height);
+		putText(frame, info,
+				cvPoint(width-130, frame.rows-5),
+				FONT_HERSHEY_PLAIN,
+				0.7,
+				_infoColor,
+				1,
+				CV_AA);
 }
 
 void View::print_targetInfo(Mat& frame, int height, int width, Point targetCenter){
-
+	circle(frame, targetCenter, 5, Scalar(0, 0, 255), 1, 8, 0);
+	circle(frame, targetCenter, 10, Scalar(0, 0, 255), 1, 8, 0);
 }
 
 
