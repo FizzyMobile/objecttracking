@@ -11,25 +11,27 @@
 using namespace cv;
 using namespace std;
 
-char *addr = "192.168.0.103";
-
+/* Khepera's address*/
+char kheperaAddress[] = "192.168.0.103";
+/* Kolo Naukowe Robotyki's Camera */
+//string rtspAddress = "rtsp://192.168.0.106:554/live.sdp";
+/* Testing Camera */
+string rtspAddress = "rtsp://212.77.7.133:80/h264lan.sdp";
 
 int main(int argc, char** argv) {
 
 	TCPIP tcpip;
-	while (!(tcpip.init() && tcpip.connect_to_server(addr, 3000))){
-				tcpip = TCPIP();
-				cout << "Connection could not be established" << endl;
-				return 1;
-			}
+	bool isKheperaConnected = false;
+	if (!(tcpip.init() && tcpip.connect_to_server(kheperaAddress, 3000))) {
+		tcpip = TCPIP();
+		printf("Connection could not be established.");
+	} else {
+		isKheperaConnected = true;
+		printf("Connection has been established.");
+	}
 
 	View* view;
 	bool finish = false;
-
-	/* Kolo Naukowe Robotyki's Camera */
-	//string rtspAddress = "rtsp://192.168.0.106:554/live.sdp";
-	/* Testing Camera */
-	string rtspAddress = "rtsp://212.77.7.133:80/h264lan.sdp";
 
 	MainMenu* mainMenu = new MainMenu();
 	mainMenu->show();
@@ -71,26 +73,19 @@ int main(int argc, char** argv) {
 		view->print_viewInfo();
 		if (view->is_target_set()){
 			view->print_targetInfo();
-			/*
-			 * int frame_height = view->get_height();
-			 * int frame_width = view->get_width();
-			 * Point target_center = view->get_target_position();
-			 * printf("Target center: x:%d/%d y:%d/%d\n", target_center.x, frame_width, target_center.y, frame_height);
-			 */
+			if (isKheperaConnected){
+				control = wc.getSpeeds(view->get_target_position().x, DIST);
+				cout << control.first << ", " << control.second << endl;
+				tcpip.send_speed(control.first, control.second);
+			}
 		}
 
 		view->show_main_panel();
-
 		view->capture();
 		finish = view->is_stoped();
-
-		control = wc.getSpeeds(view->get_target_position().x, DIST);
-		cout << control.first << ", " << control.second << endl;
-		tcpip.send_speed(control.first, control.second);
-
 	}
 
-	//tcpip.send_speed(0,0);
+	tcpip.send_speed(0,0);
 	cvDestroyAllWindows();
 	return 0;
 }
