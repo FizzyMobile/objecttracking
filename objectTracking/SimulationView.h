@@ -57,6 +57,8 @@ public:
 	void resume();	//resume showing stream
 	void stop(); 	//stop showing stream and finish
 	void capture();	//update current frame
+	/* TACKING */
+	void track_target(); //tracking by getting biggest object
 	/* VIEWS */
 	void show_main_panel();
 	/* GETTERS */

@@ -31,6 +31,8 @@ public:
 	virtual void resume() = 0;
 	virtual void stop() = 0;
 	virtual void capture() = 0;
+	/* TACKING */
+	virtual void track_target() = 0;
 	/* VIEWS */
 	virtual void print_viewInfo() = 0;
 	virtual void print_targetInfo() = 0;

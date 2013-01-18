@@ -15,6 +15,7 @@
 #include "opencv2/core/core.hpp"
 #include "View.h"
 #include "Target.h"
+#include "GHT.h"
 
 #define CAMERA_VIEW_NAME "Camera View"
 struct panel_t {
@@ -36,6 +37,7 @@ private:
 	bool _stop;
 	struct panel_t _mainPanel;
 	Target _target;
+	GHT _ght;
 	/* PANEL */
 	void init_main_panel();
 	void print_viewInfo();
@@ -52,6 +54,8 @@ public:
 	void resume();	//resume showing stream
 	void stop(); 	//stop showing stream and finish
 	void capture();	//update current frame
+	/* TACKING */
+	void track_target(); //tracking with GHT
 	/* VIEWS */
 	void show_main_panel();	//default khepera view with main panel
 	/* GETTERS */

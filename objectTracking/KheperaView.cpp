@@ -200,3 +200,7 @@ void KheperaView::show_main_panel() {
 void KheperaView::set_rtsp(const string rtsp) {
 	_rtsp = rtsp;
 }
+
+void KheperaView::track_target(){
+	printf("tracking\n");
+}

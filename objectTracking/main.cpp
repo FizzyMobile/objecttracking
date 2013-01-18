@@ -83,6 +83,9 @@ int main(int argc, char** argv) {
 		view->show_main_panel();
 		view->capture();
 		finish = view->is_stoped();
+		if (!finish){
+			view->track_target();
+		}
 	}
 
 	tcpip.send_speed(0,0);

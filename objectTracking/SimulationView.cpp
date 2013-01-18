@@ -135,8 +135,14 @@ void SimulationView::capture() {
 				1,
 				8,
 				0);
+	}
+}
+
+void SimulationView::track_target(){
+	if (!_stop){
 		Mat targetImg = _frame(Range(0, 0 + _height-_margin), Range(0, 0 + _width));
 		CvRect targetBox = cvRect(0, 0, _height-_margin, _width);
+
 		if (!is_target_set()){
 			set_target(point_new_target(targetImg, targetBox));
 		} else {
