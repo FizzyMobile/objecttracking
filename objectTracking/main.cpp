@@ -14,9 +14,9 @@ using namespace std;
 /* Khepera's address*/
 char kheperaAddress[] = "192.168.0.103";
 /* Kolo Naukowe Robotyki's Camera */
-//string rtspAddress = "rtsp://192.168.0.106:554/live.sdp";
+string rtspAddress = "rtsp://192.168.0.106:554/live.sdp";
 /* Testing Camera */
-string rtspAddress = "rtsp://212.77.7.133:80/h264lan.sdp";
+//string rtspAddress = "rtsp://212.77.7.133:80/h264lan.sdp";
 
 int main(int argc, char** argv) {
 
@@ -24,10 +24,10 @@ int main(int argc, char** argv) {
 	bool isKheperaConnected = false;
 	if (!(tcpip.init() && tcpip.connect_to_server(kheperaAddress, 3000))) {
 		tcpip = TCPIP();
-		printf("Connection could not be established.");
+		printf("Connection could not be established.\n");
 	} else {
 		isKheperaConnected = true;
-		printf("Connection has been established.");
+		printf("Connection has been established.\n");
 	}
 
 	View* view;
@@ -90,5 +90,6 @@ int main(int argc, char** argv) {
 
 	tcpip.send_speed(0,0);
 	cvDestroyAllWindows();
+	waitKey(0);
 	return 0;
 }

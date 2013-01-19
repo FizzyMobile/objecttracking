@@ -7,8 +7,6 @@
 
 #include "KheperaView.h"
 
-using cv::line;
-using cv::line;
 
 KheperaView::KheperaView(string rtspAddress) {
 	_pause = true;
@@ -117,15 +115,15 @@ void KheperaView::set_target(Target* target) {
 
 void KheperaView::print_viewInfo(){
 	char info[50];
-		sprintf(info, "Press: [Q] to quit");
-		putText(_frame, info,
-				cvPoint(10, get_height()-5),
-				FONT_HERSHEY_PLAIN,
-				0.7,
-				View::get_infoColor(),
-				1,
-				CV_AA);
-		View::print_viewInfo(_frame, get_height(), get_width());
+	sprintf(info, "Press: [Q] to quit");
+	putText(_frame, info,
+			cvPoint(10, get_height()-5),
+			FONT_HERSHEY_PLAIN,
+			0.7,
+			View::get_infoColor(),
+			1,
+			CV_AA);
+	View::print_viewInfo(_frame, get_height(), get_width());
 }
 
 void KheperaView::print_targetInfo(){
@@ -202,5 +200,7 @@ void KheperaView::set_rtsp(const string rtsp) {
 }
 
 void KheperaView::track_target(){
-	printf("tracking\n");
+	if (is_target_set()){
+		Point max =_ght.generalized_hough_transform(_frame.clone(), _target.get_contours(), _target.get_center());
+	}
 }

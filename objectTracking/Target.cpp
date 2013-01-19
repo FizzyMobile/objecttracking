@@ -22,6 +22,8 @@ int half_size(int size) {
 Target::Target(Mat targetImg, CvRect rectBounding) {
 	_targetImg = targetImg.clone();
 	this->extract_from(_targetImg); // _rectBoundingMask created
+	_rectPosition.x = rectBounding.x;
+	_rectPosition.y = rectBounding.y;
 	if (this->adjust_size(rectBounding)) {
 		_center.x = half_size(_rectBoundingMask.cols) + _rectBounding.x;
 		_center.y = half_size(_rectBoundingMask.rows) + _rectBounding.y;
@@ -48,14 +50,12 @@ void Target::simulate(Mat targetImg, CvRect rectBounding) {
 }
 
 void Target::extract_from(Mat image) {
-	const double CONTRAST = 1.2;
-	const int BRIGHTNESS = 0;
 	Mat tempImg;
 
 	// Prepare for contour finding
-	image.convertTo(image, -1, CONTRAST, BRIGHTNESS); // better contrast
+	blur(image, image, Size(3, 3));
 	cvtColor(image, tempImg, CV_RGB2GRAY); // to gray scale
-	Canny(tempImg, tempImg, 100, 200); // standard filter
+	Canny(tempImg, tempImg, 10, 30); // standard filter
 
 	// Contour finding
 	vector<vector<Point> > contours;
@@ -86,13 +86,25 @@ void Target::pick_bigger_object(vector<vector<Point> > contours,
 			CV_8UC1);
 	_rectBoundingMask = noneMask.clone(); // clearing mask in order to draw only one object
 	drawContours(_rectBoundingMask, contours, maxPosition.y, Scalar(255), CV_FILLED); //Scalar(0) -> black = background; 255->object
-	vector<Point> newContours = contours.at(maxPosition.y);
-	setContours(newContours);
+	vector<vector<Point> > newContours;
+	newContours.push_back(contours.at(maxPosition.y));
+	set_contours(newContours);
 }
 
-void Target::setContours(vector<Point> newContours){
+void Target::set_contours(vector<vector<Point> > newContours){
 	_contours.reserve(newContours.size());
 	copy(newContours.begin(),newContours.end(),back_inserter(_contours));
+}
+
+vector<vector<Point> > Target::get_contours(){
+	vector<vector<Point> > contours(_contours);
+	for (int i = 0; (unsigned)i < contours.size(); i++){
+		for (int j = 0; (unsigned)j < contours[i].size(); j++){
+			contours.at(i).at(j).x += _rectPosition.x;
+			contours.at(i).at(j).y += _rectPosition.y;
+		}
+	}
+	return contours;
 }
 
 bool Target::adjust_size(CvRect oldRect) {

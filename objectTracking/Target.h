@@ -26,8 +26,9 @@ private:
 	Mat _rectBoundingMask; //black for background; white for object
 	Point _center;
 	CvRect _rectBounding; 	//.x & .y are global for camera frame not _targetImg
-	vector<Point> _contours;
-	void setContours(vector<Point> newContours);
+	Point _rectPosition;
+	vector<vector<Point> > _contours;
+	void set_contours(vector<vector<Point> > newContours);
 	/* IMAGE RECOGNITION */
 	void extract_from(Mat image);
 	void pick_bigger_object(vector<vector<Point> > contours,
@@ -40,6 +41,7 @@ public:
 	/* GETTERS */
 	bool is_ready();
 	Point get_center();
+	vector<vector<Point> > get_contours();
 	/* SIMULATION */
 	void simulate(Mat targetImg, CvRect rectBounding); // is updating Point _center
 };
