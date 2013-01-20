@@ -41,6 +41,7 @@ public:
 	/* GETTERS */
 	bool is_ready();
 	Point get_center();
+	void set_center(Point newCenter);
 	vector<vector<Point> > get_contours();
 	/* SIMULATION */
 	void simulate(Mat targetImg, CvRect rectBounding); // is updating Point _center

@@ -186,7 +186,7 @@ void KheperaView::show_main_panel() {
 	cvSetMouseCallback(_mainPanel.name, mouse_callback, (void*) this);
 	if (!_pause) {
 		imshow(_mainPanel.name, _frame);
-		if (waitKey(1) >= 0) {
+		if (waitKey(5) >= 0) {
 		};
 	} else {
 		imshow(_mainPanel.name, _pauseFrame);
@@ -201,6 +201,6 @@ void KheperaView::set_rtsp(const string rtsp) {
 
 void KheperaView::track_target(){
 	if (is_target_set()){
-		Point max =_ght.generalized_hough_transform(_frame.clone(), _target.get_contours(), _target.get_center());
+		_target.set_center(_ght.generalized_hough_transform(_frame.clone(), _target.get_contours(), _target.get_center()));
 	}
 }

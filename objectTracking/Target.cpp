@@ -207,3 +207,7 @@ bool Target::is_ready() {
 Point Target::get_center() {
 	return _center;
 }
+
+void Target::set_center(Point newCenter){
+	_center = newCenter;
+}
