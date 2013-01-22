@@ -27,6 +27,7 @@ private:
 	int _imageYsize;
 	vector<vector<Point> > _inputContours;
 	bool is_pixel_set(Mat image, int x, int y);
+	void set_image_sizes(Mat image);
 public:
 	GHT();
 	GHT(int height, int width);

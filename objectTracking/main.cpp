@@ -22,11 +22,17 @@ int main(int argc, char** argv) {
 
 	TCPIP tcpip;
 	bool isKheperaConnected = false;
-	if (!(tcpip.init() && tcpip.connect_to_server(kheperaAddress, 3000))) {
+	int triesLeft = 2;
+	while (!(tcpip.init() && tcpip.connect_to_server(kheperaAddress, 3000)) && triesLeft > 0) {
 		tcpip = TCPIP();
+		triesLeft--;
+	}
+	if (triesLeft > 0){
+		isKheperaConnected = true;
+	}
+	if (!isKheperaConnected) {
 		printf("Connection could not be established.\n");
 	} else {
-		isKheperaConnected = true;
 		printf("Connection has been established.\n");
 	}
 

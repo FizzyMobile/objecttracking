@@ -89,6 +89,17 @@ void Target::pick_bigger_object(vector<vector<Point> > contours,
 	vector<vector<Point> > newContours;
 	newContours.push_back(contours.at(maxPosition.y));
 	set_contours(newContours);
+	/*
+	int pos = 0;
+	for (int i = 1; (unsigned) i < contours.size(); i++){
+		if (contours.at(pos).size() < contours.at(i).size()){
+			pos = i;
+		}
+	}
+	vector<vector<Point> > newContours;
+	newContours.push_back(contours.at(pos));
+	set_contours(newContours);
+	*/
 }
 
 void Target::set_contours(vector<vector<Point> > newContours){

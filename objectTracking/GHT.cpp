@@ -27,6 +27,11 @@ bool GHT::is_pixel_set(Mat image, int x, int y){
 	}
 }
 
+void GHT::set_image_sizes(Mat image){
+	_imageYsize = image.size().height;
+	_imageXsize = image.size().width;
+}
+
 Point GHT::generalized_hough_transform(Mat image, vector<vector<Point> > contours, Point refPoint) {
 	Point max;
 	max.x = 0;
@@ -34,28 +39,24 @@ Point GHT::generalized_hough_transform(Mat image, vector<vector<Point> > contour
 	cvtColor(image, image, CV_RGB2GRAY);
 	blur(image, image, Size(3, 3));
 	Canny(image, image, 30, 70);
-//	imshow("INPUT", image);
+	//imshow("INPUT", image);
 
 /*
 	Mat ref = Mat::zeros( image.size(), CV_32FC3 );
 	drawContours(ref, contours, 0, Scalar(255), CV_FILLED);
 	imshow("REF", ref);
-*/
+//*/
 	if (_imageYsize == 0){
-		_imageYsize = image.size().height;
-		_imageXsize = image.size().width;
-	}
-
-	if (_data){
+		set_image_sizes(image.clone());
 		_data = new float*[_imageYsize];
 		for (int i = 0; i < _imageYsize; i++){
 			_data[i] = new float[_imageXsize];
 		}
-	}
 
-	for (int i = 0; i < _imageYsize; i++){
-		for (int j = 0; j < _imageXsize; j++){
-			_data[i][j] = 0.0f;
+		for (int i = 0; i < _imageYsize; i++){
+			for (int j = 0; j < _imageXsize; j++){
+				_data[i][j] = 0.0f;
+			}
 		}
 	}
 
@@ -66,7 +67,6 @@ Point GHT::generalized_hough_transform(Mat image, vector<vector<Point> > contour
 		for (int j = 0; (unsigned)j < _inputContours.at(i).size(); j++){
 			imageX = _inputContours.at(i).at(j).x;
 			imageY = _inputContours.at(i).at(j).y;
-
 			for (int c = 0; (unsigned) c < contours.at(0).size(); c++){
 				voteX = refPoint.x - contours.at(0).at(c).x;
 				voteY = refPoint.y - contours.at(0).at(c).y;
@@ -83,6 +83,12 @@ Point GHT::generalized_hough_transform(Mat image, vector<vector<Point> > contour
 						_data[imageY + voteY][imageX + voteX] = 1.0f;
 					} else {
 						_data[imageY + voteY][imageX + voteX] += 1.0f;
+						if ((refPoint.x - imageX + voteX)*(refPoint.x - imageX + voteX) < 400){
+							_data[imageY + voteY][imageX + voteX] += 2.0f;
+						}
+						if ((refPoint.y - imageY + voteY)*(refPoint.y - imageY + voteY) < 400){
+							_data[imageY + voteY][imageX + voteX] += 2.0f;
+						}
 					}
 				}
 			}
@@ -99,6 +105,7 @@ Point GHT::generalized_hough_transform(Mat image, vector<vector<Point> > contour
 					max.x = j;
 				}
 			}
+			_data[i][j] = 0.0f;
 		}
 	}
 
