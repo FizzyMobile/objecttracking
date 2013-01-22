@@ -54,7 +54,7 @@ public:
 	void resume();	//resume showing stream
 	void stop(); 	//stop showing stream and finish
 	void capture();	//update current frame
-	/* TACKING */
+	/* TRACKING */
 	void track_target(); //tracking with GHT
 	/* VIEWS */
 	void show_main_panel();	//default khepera view with main panel

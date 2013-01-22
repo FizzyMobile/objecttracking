@@ -211,3 +211,36 @@ Point Target::get_center() {
 void Target::set_center(Point newCenter){
 	_center = newCenter;
 }
+
+void Target::update_contours(Mat frame){
+	// mam nowe centrum _center OK
+	// wiem jakiego rozmiaru by³ obiekt _rectBoundingMask OK
+	// szukam obiektu w miejscu centrum i na obszarze 1.2 rozmiaru maski OK
+	// update _rectPosition OK
+	// pobieram kontury
+	// wybieram te, które zajmuj¹ najwiêkszy obszar
+	// update _rectBoundingMask
+	// update konturów
+
+	int ROI_width, ROI_height;
+	_rectPosition.x = _center.x - (SIZE_CHANGE * _rectBoundingMask.cols)/2;
+	ROI_width = SIZE_CHANGE * _rectBoundingMask.cols;
+	if (_rectPosition.x < 0){
+		ROI_width += _rectPosition.x;
+		_rectPosition.x = 0;
+	}
+
+	_rectPosition.y = _center.y - (SIZE_CHANGE * _rectBoundingMask.rows)/2;
+	ROI_height = SIZE_CHANGE * _rectBoundingMask.rows;
+	if (_rectPosition.y < 0){
+		ROI_height += _rectPosition.y;
+		_rectPosition.y = 0;
+	}
+
+	Mat ROI = frame(Range(_rectPosition.y, _rectPosition.y + ROI_height),
+					Range(_rectPosition.x, _rectPosition.x + ROI_width));
+
+	extract_from(ROI);
+	_rectBounding = boundingRect(_contours.at(0));
+	_rectBoundingMask.create(_rectBounding.width, _rectBounding.height, CV_32F);
+}

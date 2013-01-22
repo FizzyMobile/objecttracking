@@ -8,6 +8,8 @@
 #ifndef TARGET_H_
 #define TARGET_H_
 
+#define SIZE_CHANGE 1.2
+
 #include "opencv2/opencv.hpp"
 #include "opencv2/core/core.hpp"
 #include "opencv2/core/types_c.h"
@@ -43,6 +45,8 @@ public:
 	Point get_center();
 	void set_center(Point newCenter);
 	vector<vector<Point> > get_contours();
+	/* TRACKING */
+	void update_contours(Mat frame);
 	/* SIMULATION */
 	void simulate(Mat targetImg, CvRect rectBounding); // is updating Point _center
 };

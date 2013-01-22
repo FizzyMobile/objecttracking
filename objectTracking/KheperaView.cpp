@@ -202,5 +202,6 @@ void KheperaView::set_rtsp(const string rtsp) {
 void KheperaView::track_target(){
 	if (is_target_set()){
 		_target.set_center(_ght.generalized_hough_transform(_frame.clone(), _target.get_contours(), _target.get_center()));
+		_target.update_contours(_frame.clone());
 	}
 }
