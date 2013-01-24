@@ -74,7 +74,7 @@ int main() {
 std::pair<int, int> WheelController::getSpeeds(int a, int h) {
 	int hw = cam_width/2;
 		float angle = atan(1.*(a - hw)/(hw) * tan(cam_angle/2));	// mozliwosc buga :P
-		float dist = (float)h/H * D;
+		float dist = (float)H/h * D;
 		cout << h << " " << H << " "<< dist << ", " << D << endl;	// tu jest zle
 		return getSpeeds(angle, dist);
 }
