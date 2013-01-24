@@ -51,7 +51,7 @@ void SimulationView::stop() {
 	_stop = true;
 }
 
-bool SimulationView::is_stoped() {
+bool SimulationView::is_stopped() {
 	return _stop;
 }
 

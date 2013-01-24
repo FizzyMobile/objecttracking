@@ -50,7 +50,7 @@ void KheperaView::stop() {
 	_stop = true;
 }
 
-bool KheperaView::is_stoped() {
+bool KheperaView::is_stopped() {
 	return _stop;
 }
 

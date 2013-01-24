@@ -63,7 +63,7 @@ public:
 	void show_main_panel();
 	/* GETTERS */
 	bool is_paused(); // returning _pause
-	bool is_stoped(); // returning _stop
+	bool is_stopped(); // returning _stop
 	bool is_target_set();
 	struct panel_t* get_mainPanel();
 	Mat* get_frame();

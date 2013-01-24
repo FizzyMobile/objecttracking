@@ -39,7 +39,7 @@ public:
 	virtual void show_main_panel() = 0;
 	/* GETTERS */
 	virtual bool is_paused() = 0;
-	virtual bool is_stoped() = 0;
+	virtual bool is_stopped() = 0;
 	virtual bool is_target_set() = 0;
 	virtual int get_height() = 0;
 	virtual int get_width() = 0;

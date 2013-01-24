@@ -8,9 +8,19 @@
 #ifndef DEFINES_H_
 #define DEFINES_H_
 
-#define INTERVAL 500
-#define CAMERA_ANGLE 90
-#define WHEEL_DIST 5000
-#define DIST 20000
+#define REF_HEIGHT 120 // referencyjna wysokosc obiektu, zmienic(?)
+
+
+#define INTERVAL 50 // s
+#define CAMERA_ANGLE (M_PI/2)
+
+//	in millimeters:
+#define WHEEL_DIST 88.5
+
+
+#define DIST 200	// distance to maintain
+#define INIT_SPEED 100 // mm/s
+
+#define COEF 144.2953f
 
 #endif /* DEFINES_H_ */

@@ -12,16 +12,21 @@
 
 class WheelController {
 public:
-	WheelController(int _cw, float _ca, float _w, float _d, int _speed);
+	WheelController(int _cw, float _ca, float _w, float _d, int _h, int _speed);
 
 	virtual ~WheelController();
-	std::pair<int, int> getSpeeds(float angle, float d);
-	std::pair<int, int> getSpeeds(int a, float d);
+//	std::pair<int, int> getSpeeds(int a, float d);
+	std::pair<int, int> getSpeeds(int a, int h);
+	static int mmpsToKhep(float speed);
 private:
+	std::pair<int, int> getSpeeds(float angle, float d);
 	int getReferenceSpeed(float d) const;
+	float getDistance(float h) const;
 	int cam_width;
 	float cam_angle, w;
 	float prev_d;
+	const float D; // reference distance
+	const int H;	// ref. size
 	int speed;
 };
 

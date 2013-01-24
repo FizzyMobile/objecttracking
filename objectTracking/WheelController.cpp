@@ -15,8 +15,7 @@
 
 using namespace std;
 
-WheelController::WheelController(int _cw, float _ca, float _w, float _d, int _speed):cam_width(_cw), cam_angle(_ca), w(_w), prev_d(_d), speed(_speed) {
-	// TODO Auto-generated constructor stub
+WheelController::WheelController(int _cw, float _ca, float _w, float _d, int _h, int _speed):cam_width(_cw), cam_angle(_ca), w(_w), prev_d(_d), D(_d), H(_h), speed(_speed) {
 
 }
 
@@ -26,9 +25,8 @@ WheelController::~WheelController() {
 
 
 std::pair<int, int> WheelController::getSpeeds(float angle, float d) {
-	//const float d = 10;
-	//const int speed = 10000;
-	//const float w = 5; // distance between a wheel and the center of the robot
+	if (d <= DIST)
+		return make_pair(0, 0);
 
 	bool to_right = angle > 0;
 
@@ -41,13 +39,19 @@ std::pair<int, int> WheelController::getSpeeds(float angle, float d) {
 		l_to_r = 1./l_to_r;
 	speed = getReferenceSpeed(d);
 	prev_d = d; // !
-	pair<int, int> speeds = make_pair(l_to_r * speed, (1./l_to_r) * speed);
+	pair<int, int> speeds = make_pair(
+			mmpsToKhep(l_to_r * speed),
+			mmpsToKhep((1./l_to_r) * speed));
 	return speeds;
 }
 
 int WheelController::getReferenceSpeed(float d) const {
 	float delta = d - prev_d;
 	return speed + 2*delta/INTERVAL;
+}
+
+int WheelController::mmpsToKhep(float speed) {
+	return speed * COEF;
 }
 
 /*
@@ -61,8 +65,15 @@ int main() {
 }
  */
 
-std::pair<int, int> WheelController::getSpeeds(int a, float d) {
+//std::pair<int, int> WheelController::getSpeeds(int a, float d) {
+//	int hw = cam_width/2;
+//	float angle = asin(1.*(a - hw)/(hw) * sin(cam_angle));
+//	return getSpeeds(angle, d);
+//}
+
+std::pair<int, int> WheelController::getSpeeds(int a, int h) {
 	int hw = cam_width/2;
-	float angle = asin(1.*(a - hw)/(hw) * sin(cam_angle));
-	return getSpeeds(angle, d);
+		float angle = atan(1.*(a - hw)/(hw) * tan(cam_angle/2));	// mozliwosc buga :P
+		float dist = h/H * D;
+		return getSpeeds(angle, dist);
 }

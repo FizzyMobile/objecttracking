@@ -22,8 +22,8 @@ int main(int argc, char** argv) {
 
 	TCPIP tcpip;
 	bool isKheperaConnected = false;
-	int triesLeft = 2;
-	while (!(tcpip.init() && tcpip.connect_to_server(kheperaAddress, 3000)) && triesLeft > 0) {
+	int triesLeft = 0;
+	while (triesLeft > 0 && !(tcpip.init() && tcpip.connect_to_server(kheperaAddress, 3000))) { //!!!
 		tcpip = TCPIP();
 		triesLeft--;
 	}
@@ -72,23 +72,23 @@ int main(int argc, char** argv) {
 	}
 
 
-	WheelController wc(view->get_width(), CAMERA_ANGLE, WHEEL_DIST, DIST, 10000);
+	WheelController wc(view->get_width(), CAMERA_ANGLE, WHEEL_DIST/2, DIST, REF_HEIGHT, INIT_SPEED);
 	pair<int,int> control;
 
 	while (!finish) {
 		view->print_viewInfo();
 		if (view->is_target_set()){
 			view->print_targetInfo();
+			control = wc.getSpeeds(view->get_target_position().x, REF_HEIGHT/2);	// zmienic na wysokosc celu
+			cout << control.first << ", " << control.second << endl;
 			if (isKheperaConnected){
-				control = wc.getSpeeds(view->get_target_position().x, DIST);
-				cout << control.first << ", " << control.second << endl;
 				tcpip.send_speed(control.first, control.second);
 			}
 		}
 
 		view->show_main_panel();
 		view->capture();
-		finish = view->is_stoped();
+		finish = view->is_stopped();
 		if (!finish){
 			view->track_target();
 		}

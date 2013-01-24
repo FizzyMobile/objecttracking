@@ -60,7 +60,7 @@ public:
 	void show_main_panel();	//default khepera view with main panel
 	/* GETTERS */
 	bool is_paused(); // returning _pause
-	bool is_stoped(); // returning _stop
+	bool is_stopped(); // returning _stop
 	bool is_target_set();  // returning is target ready
 	struct panel_t* get_mainPanel();
 	Mat* get_frame();
