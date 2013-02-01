@@ -12,7 +12,7 @@ using namespace cv;
 using namespace std;
 
 /* Khepera's address*/
-char kheperaAddress[] = "192.168.0.103";
+char kheperaAddress[] = "192.168.0.104";
 /* Kolo Naukowe Robotyki's Camera */
 string rtspAddress = "rtsp://192.168.0.106:554/live.sdp";
 /* Testing Camera */
@@ -22,7 +22,7 @@ int main(int argc, char** argv) {
 
 	TCPIP tcpip;
 	bool isKheperaConnected = false;
-	int triesLeft = 0;
+	int triesLeft = 10;
 	while (triesLeft > 0 && !(tcpip.init() && tcpip.connect_to_server(kheperaAddress, 3000))) { //!!!
 		tcpip = TCPIP();
 		triesLeft--;
@@ -80,7 +80,7 @@ int main(int argc, char** argv) {
 		if (view->is_target_set()){
 			view->print_targetInfo();
 			control = wc.getSpeeds(view->get_target_position().x, REF_HEIGHT/2);	// zmienic na wysokosc celu
-			cout << control.first << ", " << control.second << endl;
+//			cout << control.first << ", " << control.second << endl;
 			if (isKheperaConnected){
 				tcpip.send_speed(control.first, control.second);
 			}
