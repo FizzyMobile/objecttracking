@@ -11,7 +11,7 @@
 #define REF_HEIGHT 120 // referencyjna wysokosc obiektu, zmienic(?)
 
 
-#define INTERVAL 50 // s
+#define INTERVAL 50 // ms
 #define CAMERA_ANGLE (M_PI/2)
 
 //	in millimeters:

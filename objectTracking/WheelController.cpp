@@ -33,15 +33,19 @@ std::pair<int, int> WheelController::getSpeeds(float angle, float d) {
 	angle = abs(angle);
 	float alpha = (M_PI/2) - angle;
 	float r = 0.5 * d / cos(alpha);
-	float l_to_r = (r+w)/(r-w);
 	//cout << "r=" << r << "; " << "ltor=" << l_to_r << endl;
-	if(!to_right)
-		l_to_r = 1./l_to_r;
 	speed = getReferenceSpeed(d);
 	prev_d = d; // !
-	pair<int, int> speeds = make_pair(
-			mmpsToKhep(l_to_r * speed),
-			mmpsToKhep((1./l_to_r) * speed));
+	pair<int, int> speeds;
+	if(to_right) {
+		speeds = make_pair(
+			mmpsToKhep((r+w)/r * speed),
+			mmpsToKhep((r-w)/r * speed));
+	} else {
+		speeds = make_pair(
+					mmpsToKhep((r-w)/r * speed),
+					mmpsToKhep((r+w)/r * speed));
+	}
 	return speeds;
 }
 
