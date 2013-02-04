@@ -70,7 +70,7 @@ void SimulationView::updateObjectRepresentation() {
 	(_object.objectTopLeft).y = _height/2 - _object.size/2;
 	(_object.objectBottomRight).y = _height/2 + _object.size/2;
 
-	cout << _object.size << endl;
+//	cout << _object.size << endl;
 
 
 }

@@ -24,7 +24,7 @@ int main(int argc, char** argv) {
 	TCPIP tcpip;
 	bool simMode = false;
 	bool isKheperaConnected = false;
-	int triesLeft = 0; //!!!
+	int triesLeft = 0; 		// nie polaczy sie, jak widac
 	while (triesLeft > 0 && !(tcpip.init() && tcpip.connect_to_server(kheperaAddress, 3000))) { //!!!
 		tcpip = TCPIP();
 		triesLeft--;
@@ -75,7 +75,7 @@ int main(int argc, char** argv) {
 	}
 
 
-	WheelController wc(view->get_width(), CAMERA_ANGLE, WHEEL_DIST/2, DIST, REF_HEIGHT, INIT_SPEED);
+	WheelController wc(view->get_width(), CAMERA_ANGLE, WHEEL_DIST/2, DIST, REF_HEIGHT, 0);	// ostatni param: predkosc poczatkowa
 	pair<int,int> control;
 
 	while (!finish) {
@@ -84,7 +84,12 @@ int main(int argc, char** argv) {
 			view->print_targetInfo();
 			// simulation mode
 			if(simMode){
-				//control = wc.getSpeeds(view->get_target_position().x, (int)((SimulationView*)view)->sim.getHeight());	// zmienic na wysokosc celu
+				((SimulationView*)view)->sim.printCoords();
+				if(!OBSERVER) {
+					control = wc.getSpeeds(view->get_target_position().x, (int)((SimulationView*)view)->sim.getHeight());	// zmienic na wysokosc celu
+					if(control.first != 0)
+						((SimulationView*)view)->sim.moveRobot(wc.getR(), wc.getSpeed()*INTERVAL, (control.first >= control.second));
+				}
 			} else {	// normal mode
 				control = wc.getSpeeds(view->get_target_position().x, REF_HEIGHT/2);	// zmienic na wysokosc celu
 			}

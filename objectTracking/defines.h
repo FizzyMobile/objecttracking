@@ -8,8 +8,10 @@
 #ifndef DEFINES_H_
 #define DEFINES_H_
 
-#define REF_HEIGHT 40 // referencyjna wysokosc obiektu, zmienic(?)
 
+#define OBSERVER false	// tryb obserwatora
+
+#define REF_HEIGHT 40 // referencyjna wysokosc obiektu
 
 #define INTERVAL 0.5f // ms
 #define CAMERA_ANGLE (M_PI/2)

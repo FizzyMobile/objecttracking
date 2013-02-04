@@ -20,6 +20,7 @@ public:
 	void moveTracked(float angle, float dist);
 	float getAngle();	// returns the angle of tracked from robot's axis
 	float getHeight();	// returns the angle of tracked from robot's axis
+	void printCoords();
 private:
 	float refHeight, refDist;
 };

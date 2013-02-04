@@ -38,6 +38,12 @@ void Simulation::moveTracked(float angle, float dist) {
 	tracked.phi = fmod(tracked.phi + angle, 2*(float)M_PI);
 	tracked.x += sin(tracked.phi)*dist;
 	tracked.y += cos(tracked.phi)*dist;
+}
+
+void Simulation::printCoords() {
+	cout << "Robot:		";
+	robot.printCoords();
+	cout << "Tracked:	";
 	tracked.printCoords();
 }
 
