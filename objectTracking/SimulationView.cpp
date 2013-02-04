@@ -6,8 +6,13 @@
  */
 
 #include "SimulationView.h"
+#include "defines.h"
+#include <cmath>
+#include <iostream>
+using namespace std;
 
-SimulationView::SimulationView() {
+SimulationView::SimulationView():trackedSpeed(INIT_SPEED),sim(DIST, REF_HEIGHT) { // initial distance
+	//sim.init();
 	_pause = true;
 	_stop = false;
 	init_main_panel();
@@ -17,7 +22,7 @@ void SimulationView::init_main_panel() {
 	_width = WINDOW_WIDTH;
 	_height = WINDOW_HEIGHT;
 	_margin = 20;
-	_object.size = 30;
+	_object.size = REF_HEIGHT; //!
 	_object.speed = 3;
 	_object.objectTopLeft = cvPoint((_width-_object.size)/2, (_height-_object.size)/2);
 	_object.objectBottomRight = cvPoint((_width+_object.size)/2, (_height+_object.size)/2);
@@ -55,14 +60,28 @@ bool SimulationView::is_stopped() {
 	return _stop;
 }
 
+void SimulationView::updateObjectRepresentation() {
+	_object.size = sim.getHeight();
+	int frameCenter = _width/2;
+	int objCenter = sin(sim.getAngle())/sin(CAMERA_ANGLE/2) * frameCenter  + frameCenter;
+	(_object.objectTopLeft).x = objCenter - _object.size/2;
+	(_object.objectBottomRight).x = objCenter + _object.size/2;
+
+	(_object.objectTopLeft).y = _height/2 - _object.size/2;
+	(_object.objectBottomRight).y = _height/2 + _object.size/2;
+
+	cout << _object.size << endl;
+
+
+}
+
 void SimulationView::set_target(Target* target) {
 	_target = *target;
 }
 
 bool SimulationView::simulation_key_listener(Object_t* object, int max_x, int max_y) {
 	char key;
-	key = cvWaitKey(0);
-
+	key = cvWaitKey(0);	// keypress wait time
 	switch (key){
 	case 'S':
 	case 's':
@@ -76,33 +95,15 @@ bool SimulationView::simulation_key_listener(Object_t* object, int max_x, int ma
 		break;
 	case 'D':
 	case 'd':
-		if((object->objectBottomRight).x + (object->speed) < max_x){
-			(object->objectTopLeft).x += object->speed;
-			(object->objectBottomRight).x += object->speed;
-		} else {
-			(object->objectTopLeft).x = max_x - object->size -1;
-			(object->objectBottomRight).x = max_x -1;
-		}
+		sim.moveTracked(ROTATION_STEP, trackedSpeed * INTERVAL );
 		break;
 	case 'W':
 	case 'w':
-		if((object->objectTopLeft).y - (object->speed) >= 0){
-			(object->objectTopLeft).y -= object->speed;
-			(object->objectBottomRight).y -= object->speed;
-		} else {
-			(object->objectTopLeft).y = 0;
-			(object->objectBottomRight).y = 0 + object->size;
-		}
+		sim.moveTracked(0, trackedSpeed * INTERVAL );
 		break;
 	case 'A':
 	case 'a':
-		if((object->objectTopLeft).x - (object->speed) >= 0){
-			(object->objectTopLeft).x -= object->speed;
-			(object->objectBottomRight).x -= object->speed;
-		} else {
-			(object->objectTopLeft).x = 0;
-			(object->objectBottomRight).x = 0 + object->size;
-		}
+		sim.moveTracked(-ROTATION_STEP, trackedSpeed * INTERVAL );
 		break;
 	case 43: // '+'
 		if ((object->speed) < 10){
@@ -116,6 +117,7 @@ bool SimulationView::simulation_key_listener(Object_t* object, int max_x, int ma
 			printf("Object speed set to value: %d\n", object->speed);
 		}
 		break;
+
 	case 'Q':
 	case 'q':
 		return true;
@@ -127,6 +129,10 @@ bool SimulationView::simulation_key_listener(Object_t* object, int max_x, int ma
 void SimulationView::capture() {
 	_stop = simulation_key_listener(&_object, _width, _height-_margin);
 	if (!_stop){
+		//simulation operations
+		updateObjectRepresentation();
+
+
 		_frame = Mat::zeros(_height, _width, CV_8UC3);
 		rectangle(_frame,
 				_object.objectTopLeft,
@@ -174,7 +180,7 @@ Point SimulationView::get_target_position() {
 void SimulationView::print_viewInfo() {
 	line(_frame, cvPoint(0, _height-_margin), cvPoint(_width, _height-_margin), View::get_infoColor(), 1, 8, 0);
 			char info[50];
-			sprintf(info, "Press: | [WASD] to move | [+/-] speed | [Q] to quit |");
+			sprintf(info, "W:forward	A,D:rotate and move	S:wait	Q:quit");
 			putText(_frame, info,
 					cvPoint(10, _height-5),
 					FONT_HERSHEY_PLAIN,

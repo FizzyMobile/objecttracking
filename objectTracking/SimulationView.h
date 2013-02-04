@@ -16,6 +16,7 @@
 #include "opencv2/core/core.hpp"
 #include "View.h"
 #include "Target.h"
+#include "Simulation.h"
 
 #define SIMULATION_VIEW_NAME "Simulation View"
 #define WINDOW_WIDTH 480
@@ -33,6 +34,7 @@ struct Object_t {
 
 class SimulationView : public View {
 private:
+	float trackedSpeed;
 	int _width;
 	int _height;
 	int _margin;
@@ -43,6 +45,7 @@ private:
 	Object_t _object;
 	Target _target;
 	bool _pointingTarget;
+	void updateObjectRepresentation();
 	/* PANEL */
 	void init_main_panel();
 	void print_viewInfo();
@@ -50,6 +53,7 @@ private:
 	bool simulation_key_listener(Object_t* object, int max_x, int max_y);
 
 public:
+	Simulation sim;
 	SimulationView();
 	/* PSEUDO-STREAM MANAGEMENT */
 	int start(); 	//open stream

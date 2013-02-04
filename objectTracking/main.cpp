@@ -22,6 +22,7 @@ string rtspAddress = "rtsp://192.168.0.106:554/live.sdp";
 int main(int argc, char** argv) {
 
 	TCPIP tcpip;
+	bool simMode = false;
 	bool isKheperaConnected = false;
 	int triesLeft = 0; //!!!
 	while (triesLeft > 0 && !(tcpip.init() && tcpip.connect_to_server(kheperaAddress, 3000))) { //!!!
@@ -57,6 +58,7 @@ int main(int argc, char** argv) {
 		}
 		break;
 	case SIMULATION:
+		simMode = true;
 		view = new SimulationView();
 		if (view->start() < 0) {
 			printf("Simulation could not be started\n");
@@ -80,12 +82,22 @@ int main(int argc, char** argv) {
 		view->print_viewInfo();
 		if (view->is_target_set()){
 			view->print_targetInfo();
-			control = wc.getSpeeds(view->get_target_position().x, REF_HEIGHT/2);	// zmienic na wysokosc celu
-			cout << control.first << ", " << control.second << endl;
+			// simulation mode
+			if(simMode){
+				//control = wc.getSpeeds(view->get_target_position().x, (int)((SimulationView*)view)->sim.getHeight());	// zmienic na wysokosc celu
+			} else {	// normal mode
+				control = wc.getSpeeds(view->get_target_position().x, REF_HEIGHT/2);	// zmienic na wysokosc celu
+			}
+
+			//cout << control.first << ", " << control.second << endl;
 			if (isKheperaConnected){
 				tcpip.send_speed(control.first, control.second);
 			}
+
 		}
+		if(!simMode)
+			usleep(1000000 * INTERVAL);	//
+
 
 		view->show_main_panel();
 		view->capture();
@@ -93,7 +105,6 @@ int main(int argc, char** argv) {
 		if (!finish){
 			view->track_target();
 		}
-		usleep(1000 * INTERVAL);
 	}
 
 	tcpip.send_speed(0,0);
